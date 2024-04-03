@@ -1,16 +1,39 @@
-import { SlTrash, SlNote } from "react-icons/sl"
-import { IoMdHeart } from "react-icons/io"
-import { MdEditCalendar } from "react-icons/md"
-import { useState } from "react"
+// UserCard.jsx
+import { useDispatch, useSelector } from "react-redux"
+import {
+  addUser,
+  removeUser,
+  selectSelectedUserIds,
+} from "../redux/team/teamSlice.js"
 
-const UserCard = ({ user, lastUserRef = null }) => {
-  const [selected, setSelected] = useState(false)
+import { FilePenLine, Trash } from "lucide-react"
+
+const UserCard = ({
+  user,
+  lastUserRef = null,
+  handleOpenEditModal=null,
+  handleDeleteUser=null,
+}) => {
+  const selectedUserIds = useSelector(selectSelectedUserIds)
+  const dispatch = useDispatch()
+
+  const handleCheckboxChange = () => {
+    if (selectedUserIds.includes(user._id)) {
+      dispatch(removeUser(user._id))
+    } else {
+      dispatch(addUser(user._id))
+    }
+  }
+
+  console.log("Card rendered--------------------->", user.id)
 
   return (
     <li
       ref={lastUserRef}
       className={`relative bg-white flex flex-col justify-between items-center border ${
-        selected ? "border-blue-500" : "border-gray-300"
+        selectedUserIds.includes(user._id)
+          ? "border-blue-500"
+          : "border-gray-300"
       }  shadow hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-150`}
     >
       <div className="w-full p-[10px] flex flex-col gap-2">
@@ -20,7 +43,8 @@ const UserCard = ({ user, lastUserRef = null }) => {
               type="checkbox"
               name=""
               id={user._id}
-              onChange={() => setSelected(!selected)}
+              checked={selectedUserIds.includes(user._id)}
+              onChange={handleCheckboxChange}
               className="outline-none m-0 h-[14px]"
             />
           )}
@@ -40,7 +64,7 @@ const UserCard = ({ user, lastUserRef = null }) => {
             <img
               src={user.avatar}
               alt=""
-              className="rounded-full border"
+              className="rounded-full border w-12"
             />
           </div>
           <div className="flex flex-col justify-center space-x-1">
@@ -50,16 +74,31 @@ const UserCard = ({ user, lastUserRef = null }) => {
             <p className="font-semibold text-sm">{user.email}</p>
           </div>
         </div>
-        <div className="flex self-start gap-2 flex-wrap">
-          <span className="px-3 border text-xs rounded-full flex items-center">
-            {user.domain}
-          </span>
 
-          <span
-            className={`px-3 border text-xs rounded-full flex items-center`}
-          >
-            {user.gender}
-          </span>
+        <div className="flex justify-between">
+          <div className="flex self-start gap-2 flex-wrap">
+            <span className="px-3 border text-xs rounded-full flex items-center">
+              {user.domain}
+            </span>
+
+            <span
+              className={`px-3 border text-xs rounded-full flex items-center`}
+            >
+              {user.gender}
+            </span>
+          </div>
+          <div className="flex justify-end gap-2">
+            <FilePenLine
+              className="text-[#4B5563] cursor-pointer"
+              onClick={() => handleOpenEditModal(user)}
+              size={18}
+            />
+            <Trash
+              className="text-[#4B5563] cursor-pointer"
+              onClick={() => handleDeleteUser(user._id)}
+              size={18}
+            />
+          </div>
         </div>
       </div>
     </li>

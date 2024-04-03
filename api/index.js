@@ -12,6 +12,7 @@ import rateLimit from "express-rate-limit"
 import helmet from "helmet"
 import mongoSanitize from "express-mongo-sanitize"
 import xss from "xss-clean"
+import User from "./models/userModel.js"
 
 const __dirname = path.resolve()
 const app = express()
@@ -45,6 +46,30 @@ app.use(responseMiddleware)
 // Routes middleware ------------------------------------>
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/teams", teamRouter)
+
+async function updateUsersWithTimestamps() {
+  try {
+    // Fetch all users
+    const users = await User.find()
+
+    // Iterate over each user and update their data with timestamps
+    for (const user of users) {
+      // Add timestamps to the user data
+      user.createdAt = new Date()
+      user.updatedAt = new Date()
+
+      // Save the updated user data to the database
+      await user.save()
+    }
+
+    console.log("All users updated with timestamps successfully")
+  } catch (error) {
+    console.error("Error updating users with timestamps:", error)
+  }
+}
+
+// Call the function to update users with timestamps
+// updateUsersWithTimestamps();
 
 app.use(express.static(path.join(__dirname, "/client/dist")))
 app.get("*", (req, res) => {

@@ -3,9 +3,10 @@ import { useSelector } from "react-redux"
 import { SiAuthelia } from "react-icons/si"
 
 import { FaRegUser } from "react-icons/fa6"
+import { selectSelectedUserIds } from "../redux/team/teamSlice"
 
 const Header = () => {
-  const { currentUser } = useSelector((state) => state.user)
+  const selectedUserIds = useSelector(selectSelectedUserIds)
 
   const navigate = useNavigate()
 
@@ -27,25 +28,15 @@ const Header = () => {
 
           {/* Secondary Menu */}
           <div className="flex gap-3 items-center md:order-2 justify-end">
-            {currentUser ? (
-              <>
-                <div>
-                  <button
-                    className="bg-accentRed px-4 py-3 text-xl text-white border border-black hover:bg-accentDarkRed transition duration-500 ease-in-out rounded-sm"
-                    onClick={() => navigate("/profile")}
-                  >
-                    <FaRegUser />
-                  </button>
-                </div>
-              </>
-            ) : (
+            <div>
               <button
-                className="bg-accentRed rounded-sm px-4 py-3 text-white border border-black hover:bg-accentDarkRed transition duration-500 ease-in-out"
-                onClick={() => navigate("/sign-in")}
+                className="bg-accentRed px-4 py-3 text-xl text-white border border-black hover:bg-accentDarkRed transition duration-500 ease-in-out rounded-sm flex justify-center items-center"
+                onClick={() => navigate("/team-cart")}
               >
-                Sign In
+                <FaRegUser />
+                {selectedUserIds.length}
               </button>
-            )}
+            </div>
           </div>
         </div>
       </div>

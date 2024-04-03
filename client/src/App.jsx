@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 import NotFound from "./pages/NotFound"
+import TeamCart from "./pages/TeamCart"
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
           <Route
             path="/"
             element={<Home />}
+          />
+          <Route
+            path="/team-cart"
+            element={<TeamCart />}
           />
         </Routes>
         <Footer />

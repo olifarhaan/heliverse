@@ -61,7 +61,7 @@ html {
   scrollbar-width: none;
 }
 
-input {
+input, select {
   height: 45px;
   outline: 1.5px solid #d9d9d9;
   padding: 0 8px;
