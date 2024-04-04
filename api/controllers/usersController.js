@@ -136,10 +136,12 @@ export const fetchGendersController = async (req, res, next) => {
 export const getUsersByIds = async (req, res, next) => {
   try {
     const { ids } = req.body
+    console.log(ids, "ids-------->")
 
     // Fetch user details by IDs from the database
     const users = await User.find({ _id: { $in: ids } })
 
+    console.log(users, "team users----------------->")
     res
       .status(200)
       .jsonResponse(true, 200, "Teams data fetched successfully", users)
